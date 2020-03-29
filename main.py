@@ -4,13 +4,16 @@
 # TODO: look into how to give credits; for now:
 # inspired by https://github.com/Azure-Samples/cognitive-services-speech-sdk/tree/master/samples/python/console
 
-import speech_sample
-import intent_sample
-import translation_sample
-import speech_synthesis_sample
-
-from collections import OrderedDict
 import platform
+import tkinter as tk
+from collections import OrderedDict
+
+from PIL import ImageTk, Image
+
+import intent_sample
+import speech_sample
+import speech_synthesis_sample
+import translation_sample
 
 eofkey = 'Ctrl-Z' if "Windows" == platform.system() else 'Ctrl-D'
 
@@ -85,8 +88,43 @@ def select():
     print()
 
 
-while True:
-    try:
-        select()
-    except EOFError:
-        break
+def pack_buttons(buttons=None):
+    if buttons is None:
+        buttons = []
+
+    for b in buttons:
+        b.pack()
+    pass
+
+
+def start_gui():
+    root = tk.Tk()
+    # img = ImageTk.PhotoImage(Image.open(z))
+    frame2 = tk.PhotoImage(file="True1.gif", format="gif -index 2")
+
+    gui = tk.Label(root, image=frame2)
+
+    def start_cmd():
+        print("start_cmd")
+        intent_sample.recognize_intent_once_from_mic()
+
+    gui_buttons = [
+        # tk.Button(master=gui, text="Stop", width=5, command=gui.destroy),
+        tk.Button(master=gui, text="Give command", width=10, command=start_cmd)
+    ]
+
+    pack_buttons(buttons=gui_buttons)
+    gui.pack(side="bottom", fill="both", expand="yes")
+    cmd_btn = gui_buttons[0]
+    cmd_btn.focus_set()
+    gui.mainloop()
+
+
+if __name__ == '__main__':
+    start_gui()
+
+    # while True:
+    #     try:
+    #         select()
+    #     except EOFError:
+    #         break
